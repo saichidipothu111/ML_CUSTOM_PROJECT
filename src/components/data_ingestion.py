@@ -6,23 +6,31 @@ from src.logger import logging
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass    #from python 3.9 for using class variables in-short
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
 
-'''when performing data ingestion(DI) it requires input for DI i/p can be like where i have to save train data and raw data 
+#from src.components.model_trainer import ModelTrainerConfig
+#from src.components.model_trainer import ModelTrainer
+
+'''
+when performing data ingestion(DI) it requires input for DI i/p can be like where i have to save train data and raw data 
 and those kinds of i/p's basically save in another class and this class we mention as DataIngestionConfig.the i/p's requires for data
 tranformation DataTranformationConfig and the o/p can be anything for DI like numpy,file saved in some folder.to use DI we use decorator
 inside class to define class variable we use __init_ right,but if we use DataClasss here so that we can able to directly define the class
- variable'''
+ variable
+ '''
 
-@dataclass
+@dataclass#inside class to define variables we use __init_ right,but if we use DataClasss,u will be directly define class variable
 class DataIngestionConfig: 
-    #below are class variables
+    '''
+    below are class variables
     #using artifacts folder,so that we can able to see the o/p and the path is that giving to DI and DI o/p components 
-    # will save in this path
+    # will save in this path'''
     train_data_path:str=os.path.join('artifacts',"train.csv")#----this is the i/p that i'm giving and later on train.csvfile will save in this particular apth
     test_data_path:str=os.path.join('artifacts',"test.csv")
     raw_data_path:str=os.path.join('artifacts',"data.csv")
-    #now go and start our class , if we just use variables then we use dataclass but if we have some other functions in class i would suggest
-    #to go ahed with __init__ constructor
+    '''now go and start our class , if we just use variables then we use dataclass but if we have some other functions in class i would suggest
+    to go ahed with __init__ constructor'''
 class DataIngestion:
     def __init__(self):
         self.ingestion_config=DataIngestionConfig()
@@ -49,6 +57,11 @@ class DataIngestion:
 if __name__=='__main__':
     obj=DataIngestion()
     train_data,test_data=obj.initiate_data_ingestion()
+    data_transformation=DataTransformation()
+    train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
+
+    #modeltrainer=ModelTrainer()
+    #print(modeltrainer.initiate_model_trainer(train_arr,test_arr))
 
 
 
